@@ -22,11 +22,28 @@ Quality control and adapter trimming were performed using fastp for all retained
 
 Trimmed reads were aligned to the human reference genome (GRCh38) using HISAT2. Alignment rates were consistently high across all retained samples, ranging from 97.59% to 97.97%. Most reads mapped uniquely to the genome (approximately 93.1-94.1%), while a smaller fraction mapped to multiple locations (approximately 3.8-4.7%). Only about 2.0-2.4% of reads remained unmapped. These results indicate that the sequencing reads were of high quality and well matched to the reference genome, supporting reliable downstream quantification and differential expression analysis.
 
-   ### 3.3 Differential Expression Results
-   ### 3.4 PCA Analysis
-   ### 3.5 Volcano Plot Interpretation
-   ### 3.6 Heatmap Interpretation
+### 3.3 Gene Quantification Summary
 
+Gene-level quantification was performed using featureCounts. The number of reads successfully assigned to annotated genes was high across all retained samples, ranging from 4.68 million to 18.78 million reads. Mock samples and one infected sample showed particularly strong assignment counts, while SARS_CoV_2_2 had a lower but still usable number of assigned reads. The main categories of unassigned reads were ambiguity, multimapping, lack of annotated features, and unmapped reads. No substantial losses were observed for mapping quality, chimeric reads, secondary alignments, or duplicate assignments. Overall, the quantification results were sufficient for downstream differential expression analysis.
+
+### 3.3 Differential Expression Results
+
+DESeq2 identified a large number of genes with statistically significant expression changes between mock-treated and SARS-CoV-2-infected NHBE cells. Several of the top differentially expressed genes had extremely small adjusted p-values, indicating a robust transcriptional response to infection. Among the most significant results, many genes showed positive log2 fold-change values of approximately 1.5 to 3.2, consistent with strong upregulation in infected cells, while other genes showed negative fold changes, indicating downregulation.
+Normalized count values confirmed that sequencing-depth differences had been appropriately corrected across samples. Although some genes showed zero counts across all samples, which is common in RNA-seq data, the overall dataset contained a strong and biologically meaningful differential expression signal suitable for downstream visualization and interpretation.
+
+### 3.5 Volcano Plot
+
+The volcano plot showed a clear pattern of differential expression between mock and SARS-CoV-2-infected samples. Most of the highly significant genes were located on the positive side of the log2 fold-change axis, indicating widespread upregulation in response to infection. Several genes showed both large fold changes and extremely small adjusted p-values, highlighting them as the strongest transcriptional responders. A smaller set of significantly downregulated genes was also observed on the negative side of the plot. Overall, the volcano plot indicates that SARS-CoV-2 infection induces a pronounced host transcriptional response dominated by gene activation.
+
+### 3.4 PCA Analysis
+
+Principal component analysis (PCA) of the variance-stabilized count data showed clear separation between mock-treated and SARS-CoV-2-infected samples along the first principal component (PC1), which explained 64% of the total variance. All mock samples clustered on the negative side of PC1, whereas infected samples clustered on the positive side, indicating that infection status is the major source of variation in the dataset. The second principal component (PC2), which explained 17% of the variance, captured variability within each condition, particularly among the mock replicates. Overall, the PCA plot demonstrates that SARS-CoV-2 infection produces a strong and distinct transcriptional shift in NHBE cells.
+
+### 3.6 Heatmap Interpretation
+
+The heatmap of the top 30 differentially expressed genes revealed a strong condition-specific expression pattern. The three mock samples clustered together on one side of the dendrogram, while the two SARS-CoV-2-infected samples clustered together on the other, indicating clear separation by treatment condition. Across most of the displayed genes, mock samples showed relatively lower normalized expression values, whereas infected samples showed consistently higher expression levels. This suggests that the top differentially expressed genes are predominantly induced in response to SARS-CoV-2 infection. The heatmap therefore provides additional evidence that infection status is the primary source of transcriptional variation in this dataset.
+
+ 
 ## Discussion
    - Biological meaning of results
    - Host response explanation
