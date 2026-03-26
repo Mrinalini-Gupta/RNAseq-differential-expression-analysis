@@ -43,16 +43,27 @@ Principal component analysis (PCA) of the variance-stabilized count data showed 
 
 The heatmap of the top 30 differentially expressed genes revealed a strong condition-specific expression pattern. The three mock samples clustered together on one side of the dendrogram, while the two SARS-CoV-2-infected samples clustered together on the other, indicating clear separation by treatment condition. Across most of the displayed genes, mock samples showed relatively lower normalized expression values, whereas infected samples showed consistently higher expression levels. This suggests that the top differentially expressed genes are predominantly induced in response to SARS-CoV-2 infection. The heatmap therefore provides additional evidence that infection status is the primary source of transcriptional variation in this dataset.
 
- 
+
 ## Discussion
-   - Biological meaning of results
-   - Host response explanation
-   - Limitations (missing replicate)
-   - Reliability
 
+This analysis showed that SARS-CoV-2 infection induces a strong and coordinated transcriptional response in NHBE cells. High read quality after preprocessing, together with consistently strong alignment rates of approximately 97.6-98.0%, supports the technical reliability of the dataset and downstream analyses. Gene-level quantification also produced substantial assigned read counts across retained samples, indicating that the count matrix was suitable for differential expression testing.
+
+The PCA plot demonstrated clear separation between mock-treated and infected samples, with PC1 explaining 64% of the total variance. This suggests that infection status was the dominant source of transcriptional variation in the dataset. The heatmap further supported this finding by showing distinct clustering of mock and infected samples, with many of the top differentially expressed genes displaying higher expression in infected cells. Together, these results indicate that SARS-CoV-2 infection produces a reproducible and condition-specific host transcriptional signature.
+
+Differential expression analysis identified many genes with highly significant adjusted p-values and substantial fold changes, with the strongest signal driven by upregulated genes. The volcano plot showed that significantly induced genes were more numerous and more strongly shifted than downregulated genes, suggesting that the host response to infection is dominated by transcriptional activation rather than repression. This pattern is consistent with previous reports that SARS-CoV-2 infection triggers marked host gene expression changes, particularly in pathways associated with immune signaling and inflammatory responses (Blanco-Melo et al., 2020).
+
+The overall direction of these results is biologically plausible and agrees with the published characterization of GSE147507. Blanco-Melo et al. (2020) reported that SARS-CoV-2 induces an unusual host response characterized by relatively weak type I and III interferon signaling but elevated inflammatory cytokine and chemokine expression. Although pathway enrichment analysis was not performed here, the widespread induction of significant genes and the clear distinction between infected and control samples support the conclusion that infection strongly perturbs host transcriptional regulation in NHBE cells.
+
+A limitation of the present analysis is that one infected replicate was excluded because of corrupted sequence output and zero assigned counts after quantification. In addition, one retained infected sample showed fewer assigned reads than the others, which may contribute to increased variability. Despite this, the remaining samples still produced clear separation by condition in PCA and heatmap analyses, and the differential expression results remained robust. This suggests that the major biological signal was strong enough to be detected even with a reduced infected sample set.
+
+Overall, this study demonstrates that a scripted RNA-seq workflow can reproducibly recover biologically meaningful host-response signatures from public sequencing data. The combined evidence from QC, alignment, quantification, differential expression analysis, PCA, volcano plot, and heatmap supports the conclusion that SARS-CoV-2 infection causes substantial transcriptional remodeling in NHBE cells. Future work could extend this analysis by mapping Ensembl identifiers to gene symbols and performing Gene Ontology or KEGG pathway enrichment to identify the most affected biological pathways.
+
+---
 ## Conclusion
-   - What was achieved
 
+This study demonstrates that a reproducible RNA-seq workflow can recover biologically meaningful host-response signatures from public sequencing data. The combined evidence from quality control, alignment, quantification, differential expression analysis, PCA, volcano plot, and heatmap supports the conclusion that SARS-CoV-2 infection causes substantial transcriptional remodeling in NHBE cells. Overall, the project shows that publicly available transcriptomic data can be used to generate interpretable and biologically relevant insights into host responses to viral infection.
+
+---
 ## References
 
 Blanco-Melo, D., Nilsson-Payant, B. E., Liu, W. C., Uhl, S., Hoagland, D., Møller, R., Jordan, T. X., Oishi, K., Panis, M., Sachs, D., Wang, T. T., Schwartz, R. E., Lim, J. K., & tenOever, B. R. (2020). SARS-CoV-2 launches a unique transcriptional signature from in vitro, ex vivo, and in vivo systems. Cell, 181(5), 1036-1045.e9.
@@ -61,3 +72,6 @@ Blanco-Melo D, Nilsson-Payant BE, Liu WC, Uhl S et al. Imbalanced Host Response 
 
 Daamen AR, Bachali P, Owen KA, Kingsmore KM et al. Comprehensive transcriptomic analysis of COVID-19 blood, lung, and airway. Sci Rep 2021 Mar 29;11(1):7052. PMID: 33782412
 
+Desai, N., Neyaz, A., Szabolcs, A., Shih, A. R., Chen, J. H., Thapar, V., Nieman, L. T., Solovyov, A., Mehta, A., Lieb, D. J., Kulkarni, A. S., Jaicks, C., Hajnóczky, G., Borczuk, A., & Deshpande, V. (2020). Temporal and spatial heterogeneity of host response to SARS-CoV-2 pulmonary infection. Nature Communications, 11, 6319.
+
+Gene Expression Omnibus (GEO). GSE147507: Transcriptional response to SARS-CoV-2 infection. National Center for Biotechnology Information.
