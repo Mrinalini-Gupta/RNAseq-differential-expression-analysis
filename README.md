@@ -16,7 +16,6 @@ The analysis includes:
 ## Biological Question
 Which host genes are differentially expressed in NHBE cells following SARS-CoV-2 infection compared with mock-treated controls?
 
----
 
 ## Dataset
 Public RNA-seq data were obtained from NCBI SRA from a SARS-CoV-2 host-response study in NHBE cells.
@@ -33,22 +32,24 @@ Public RNA-seq data were obtained from NCBI SRA from a SARS-CoV-2 host-response 
 ## Project Structure
 ```text
  RNAseq-differential-expression-analysis/
-â|--- metadata/
-â|    |--- samplesheet.csv
-â|--- scripts/
-â|    |--- 01_download_data.sh
-â|    |--- 02_qc_trim.sh
-â|    |--- 03_align_hisat2.sh
-â|    |--- 04_featurecounts.sh
-â|    |--- 05_deseq2_analysis.R
-â|    |--- 06_pretty_plots.R
-â|--- results/
-â|    |--- plots/
-â|    |--- tables/
-â|--- docs/
-â|--- README.md
-â|--- .gitignore
+|--- metadata/
+|    |--- samplesheet.csv
+|--- scripts/
+|    |--- 01_download_data.sh
+|    |--- 02_qc_trim.sh
+|    |--- 03_align_hisat2.sh
+|    |--- 04_featurecounts.sh
+|    |--- 05_deseq2_analysis.R
+|    |--- 06_pretty_plots.R
+|--- results/
+|    |--- plots/
+|    |--- tables/
+|--- docs/
+|--- README.md
+|--- .gitignore
 ```
+---
+
 ## Software and Requirements
 
 ### HPC modules
@@ -63,30 +64,36 @@ Public RNA-seq data were obtained from NCBI SRA from a SARS-CoV-2 host-response 
 - BiocManager::install("DESeq2")
 - install.packages("ggplot2")
 - install.packages("pheatmap")
-
+---
 ## Reference Files
 - Reference Files Reference genome: GRCh38
 - Gene annotation: Homo_sapiens.GRCh38.110.gtf
 
 ## Reproducible Workflow 
 1. Download sequencing data
+```text
 	bash scripts/01_download_data.sh
- 
-2. Perform quality control and trimming 
+``` 
+2. Perform quality control and trimming
+```text 
 	bash scripts/02_qc_trim.sh 
-
-3. Align reads to the human genome 
+```
+3. Align reads to the human genome
+```text 
 	bash scripts/03_align_hisat2.sh 
-
-4. Quantify reads at gene level 
+```
+4. Quantify reads at gene level
+```text 
 	bash scripts/04_featurecounts.sh 
-
-5. Run differential expression analysis 
+```
+5. Run differential expression analysis
+```text 
 	Rscript scripts/05_deseq2_analysis.R 
-
+```
 6. Generate publication-style plots 
+```text
 	Rscript scripts/06_plots 
-
+```
 ## Analysis Summary 
 - Reads were processed with fastp to remove low-quality bases and improve downstream alignment quality.
 
@@ -106,7 +113,7 @@ Tables: Located in results/tables/
 - DESeq2_results.csv 
 - normalized_counts.csv
 - significant_genes_padj_lt_0.05.csv
-
+---
 ## Reproducibility Notes
 - Raw FASTQ files, BAM files, and other large intermediate outputs are excluded from the GitHub repository using .gitignore. 
 
