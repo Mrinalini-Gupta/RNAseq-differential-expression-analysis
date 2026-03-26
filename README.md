@@ -32,10 +32,10 @@ Public RNA-seq data were obtained from NCBI SRA from a SARS-CoV-2 host-response 
 
 ## Project Structure
 
- RNAseq-differential-expression-analysis/
-â|--- metadata/
+ RNAseq-differential-expression-analysis/n
+â|--- metadata/n
 â|    |--- samplesheet.csv
-â|--- scripts/
+â|--- scripts/n
 â|    |--- 01_download_data.sh
 â|    |--- 02_qc_trim.sh
 â|    |--- 03_align_hisat2.sh
