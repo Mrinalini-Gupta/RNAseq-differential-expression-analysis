@@ -1,0 +1,144 @@
+.libPaths(c("~/R/library", .libPaths()))
+
+library(DESeq2)
+library(ggplot2)
+library(pheatmap)
+
+dir.create("results/plots", recursive = TRUE, showWarnings = FALSE)
+dir.create("results/tables", recursive = TRUE, showWarnings = FALSE)
+
+# -----------------------------
+# 1. Read count matrix
+# -----------------------------
+counts <- read.delim("results/counts/gene_counts.txt", comment.char = "#")
+
+# 5-sample version (because SARS_CoV_2_3 was excluded)
+countdata <- counts[,7:11]
+rownames(countdata) <- counts$Geneid
+
+colnames(countdata) <- c("Mock_1","Mock_2","Mock_3",
+                         "SARS_CoV_2_1","SARS_CoV_2_2")
+
+countdata <- as.data.frame(lapply(countdata, as.numeric))
+rownames(countdata) <- counts$Geneid
+countdata <- as.matrix(countdata)
+
+# Remove very low-count genes
+keep <- rowSums(countdata) >= 10
+countdata <- countdata[keep, ]
+
+coldata <- data.frame(
+  row.names = colnames(countdata),
+  condition = factor(c("Mock","Mock","Mock",
+                       "SARS_CoV_2","SARS_CoV_2"))
+)
+
+# -----------------------------
+# 2. DESeq2
+# -----------------------------
+dds <- DESeqDataSetFromMatrix(
+  countData = round(countdata),
+  colData = coldata,
+  design = ~ condition
+)
+
+dds <- DESeq(dds, sfType = "poscounts")
+res <- results(dds)
+
+# Order results
+resOrdered <- res[order(res$padj), ]
+res_df <- as.data.frame(resOrdered)
+res_df$gene <- rownames(res_df)
+
+# Save full results
+write.csv(res_df, "results/tables/DESeq2_results_prettyplots.csv", row.names = FALSE)
+
+# -----------------------------
+# 3. Volcano plot
+# -----------------------------
+res_df$significance <- "Not significant"
+res_df$significance[!is.na(res_df$padj) & res_df$padj < 0.05 & res_df$log2FoldChange > 1] <- "Upregulated"
+res_df$significance[!is.na(res_df$padj) & res_df$padj < 0.05 & res_df$log2FoldChange < -1] <- "Downregulated"
+
+res_df$neglog10padj <- -log10(res_df$padj)
+res_df$neglog10padj[is.infinite(res_df$neglog10padj)] <- NA
+
+top_labels <- res_df[!is.na(res_df$padj), ]
+top_labels <- top_labels[order(top_labels$padj), ]
+top_labels <- head(top_labels, 10)
+
+p1 <- ggplot(res_df, aes(x = log2FoldChange, y = neglog10padj, color = significance)) +
+  geom_point(alpha = 0.7, size = 1.8) +
+  geom_vline(xintercept = c(-1, 1), linetype = "dashed") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
+  geom_text(
+    data = top_labels,
+    aes(label = gene),
+    size = 3,
+    vjust = -0.5,
+    show.legend = FALSE
+  ) +
+  labs(
+    title = "Differential expression in NHBE cells after SARS-CoV-2 infection",
+    subtitle = "Volcano plot: SARS-CoV-2 vs Mock",
+    x = "log2 fold change",
+    y = "-log10 adjusted p-value",
+    color = "Gene class"
+  ) +
+  theme_minimal(base_size = 13)
+
+ggsave("results/plots/volcano_plot_pretty.png", plot = p1, width = 10, height = 7, dpi = 300)
+
+# -----------------------------
+# 4. PCA plot
+# -----------------------------
+vsd <- vst(dds, blind = FALSE)
+pcaData <- plotPCA(vsd, intgroup = "condition", returnData = TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+
+p2 <- ggplot(pcaData, aes(PC1, PC2, color = condition, label = name)) +
+  geom_point(size = 4) +
+  geom_text(vjust = -1, size = 4, show.legend = FALSE) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  labs(
+    title = "PCA of NHBE RNA-seq samples",
+    subtitle = "Variance-stabilized counts"
+  ) +
+  theme_minimal(base_size = 13)
+
+ggsave("results/plots/PCA_plot.png", plot = p2, width = 8, height = 6, dpi = 300)
+
+# -----------------------------
+# 5. Heatmap of top DE genes
+# -----------------------------
+res_df_no_na <- res_df[!is.na(res_df$padj), ]
+top_genes <- head(res_df_no_na$gene, 30)
+
+mat <- assay(vsd)[top_genes, ]
+mat <- t(scale(t(mat)))  # row z-score
+
+annotation_col <- data.frame(condition = coldata$condition)
+rownames(annotation_col) <- rownames(coldata)
+
+png("results/plots/top30_heatmap.png", width = 1000, height = 1200)
+pheatmap(
+  mat,
+  annotation_col = annotation_col,
+  show_rownames = TRUE,
+  fontsize_row = 8,
+  main = "Top 30 differentially expressed genes"
+)
+dev.off()
+
+# -----------------------------
+# 6. Save top significant genes table
+# -----------------------------
+sig_res <- res_df[!is.na(res_df$padj) & res_df$padj < 0.05, ]
+sig_res <- sig_res[order(sig_res$padj), ]
+write.csv(sig_res, "results/tables/significant_genes_padj_lt_0.05.csv", row.names = FALSE)
+
+cat("Plots created successfully:\n")
+cat(" - results/plots/volcano_plot_pretty.png\n")
+cat(" - results/plots/PCA_plot.png\n")
+cat(" - results/plots/top30_heatmap.png\n")

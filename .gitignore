@@ -39,11 +39,41 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
 
 # translation temp files
 po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# RNA-seq data (large files)
+raw_data/
+merged_data/
+trimmed_data/
+SRR*/
+*.sra
+# sequencing files
+*.fastq
+*.fastq.gz
+
+# alignment files
+*.sam
+*.bam
+*.bai
+
+# alignment outputs
+results/alignment/*.sam
+results/alignment/*.bam
+results/alignment/*.bai
+
+# Temporary files
+*.log
+*.tmp
+# SRA cache
+SRR*/ 
+ncbi/
+
+*.json
+
+# OS / editor
+.DS_Store

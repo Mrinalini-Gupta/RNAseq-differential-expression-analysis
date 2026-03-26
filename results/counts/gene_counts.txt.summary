@@ -1,0 +1,12 @@
+Status	results/alignment/Mock_1.sorted.bam	results/alignment/Mock_2.sorted.bam	results/alignment/Mock_3.sorted.bam	results/alignment/SARS_CoV_2_1.sorted.bam	results/alignment/SARS_CoV_2_2.sorted.bam
+Assigned	13314669	12591863	18782664	11756580	4676141
+Unassigned_Ambiguity	1848048	1755197	2566812	1695132	646434
+Unassigned_MultiMapping	1810588	1860005	3006889	1506653	585031
+Unassigned_NoFeatures	570816	674170	966986	520524	214711
+Unassigned_Unmapped	369853	387860	541599	301577	138752
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_Nonjunction	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
